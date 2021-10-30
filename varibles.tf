@@ -1,6 +1,6 @@
 variable "ami"{
  type = string
-  default = "ami-041d6256ed0f2061c"
+  default = "ami-02e136e904f3da870"
 }
 variable "keyname"{
   default = "MY-TEMP-PVT-INSTANCE"
