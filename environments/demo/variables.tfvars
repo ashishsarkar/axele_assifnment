@@ -1,0 +1,13 @@
+aws_region                = "us-east-1"
+vpc_cidr_block            = "10.12.0.0/16"
+public_subnet_cidr_block  = "10.12.1.0/24"
+private_subnet_cidr_block = "10.12.2.0/24"
+account_no                = "a0001"
+region                    = "use1"
+avail_zone                = "1a"
+deployment_stage          = "x" # demo
+client                    = "acc"
+product                   = "inf"
+projectcode               = "011234"
+environment               = "Demo"
+owner                     = "Admin"
