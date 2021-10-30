@@ -256,14 +256,14 @@ ingress {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = [aws_vpc.main.id]
+    cidr_blocks = [aws_vpc.main.cidr_block]
   }
 
   ingress {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = [aws_vpc.main.id]
+    cidr_blocks = [aws_vpc.main.cidr_block]
   }
 
   # "ingress": [ { "cidr_blocks": ["10.0.0.0/16"], "protocol": "tcp", "from_port": 22, "to_port": 22 } ]
