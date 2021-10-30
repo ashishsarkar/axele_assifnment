@@ -276,9 +276,9 @@ resource "aws_launch_configuration" "webserver-launch-config" {
 
 
 # Create Auto Scaling Group
-resource "aws_autoscaling_group" "Demo-ASG-tf" {
+resource "aws_autoscaling_group" "Demo_ASG_tf" {
   name		     = "Demo-ASG-tf"
-  desired_capacity   = 3
+  # desired_capacity   = 3
   max_size           = 4
   min_size           = 2
   force_delete       = true
@@ -339,5 +339,35 @@ resource "aws_lb_listener" "front_end" {
   default_action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.TG-tf.arn
+  }
+}
+
+
+#---------------------------------------------------------------------------------------------------
+
+resource "aws_autoscalingplans_scaling_plan" "autoscale_plans" {
+  name = "example-dynamic-cost-optimization"
+
+  application_source {
+    tag_filter {
+      key    = "application"
+      values = ["example"]
+    }
+  }
+
+  scaling_instruction {
+    max_capacity       = 3
+    min_capacity       = 0
+    resource_id        = format("autoScalingGroup/%s", aws_autoscaling_group.Demo_ASG_tf.name)
+    scalable_dimension = "autoscaling:autoScalingGroup:DesiredCapacity"
+    service_namespace  = "autoscaling"
+
+    target_tracking_configuration {
+      predefined_scaling_metric_specification {
+        predefined_scaling_metric_type = "ASGAverageCPUUtilization"
+      }
+
+      target_value = 70
+    }
   }
 }
