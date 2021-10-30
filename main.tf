@@ -245,6 +245,59 @@ egress {
   }
 }
 
+
+# Bastion Host
+resource "aws_security_group" "webserver_sg" {
+  name        = "bastion_security_group"
+  description = "bastion_security_group"
+  vpc_id      = aws_vpc.main.id
+
+ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = aws_subnet.prv_sub1.id
+  }
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = aws_subnet.prv_sub2.id
+  }
+
+  # "ingress": [ { "cidr_blocks": ["10.0.0.0/16"], "protocol": "tcp", "from_port": 22, "to_port": 22 } ]
+  
+egress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
+ tags = {
+    Name = var.sg_ws_tagname 
+    Project = "demo-assignment"
+  }
+}
+
+
+resource "aws_instance" "foo" {
+  ami           = "ami-005e54dee72cc1d00" # us-west-2
+  instance_type = "t2.micro"
+
+  network_interface {
+    network_interface_id = aws_network_interface.foo.id
+    device_index         = 0
+  }
+
+  credit_specification {
+    cpu_credits = "unlimited"
+  }
+}
+
+
 #Create Launch config
 
 resource "aws_launch_configuration" "webserver-launch-config" {
@@ -305,7 +358,7 @@ resource "aws_lb_target_group" "TG-tf" {
   vpc_id   = "${aws_vpc.main.id}"
   health_check {
     interval            = 70
-    path                = "/index.html"
+    path                = "/"
     port                = 80
     healthy_threshold   = 2
     unhealthy_threshold = 2
