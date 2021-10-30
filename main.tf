@@ -345,6 +345,8 @@ resource "aws_lb_listener" "front_end" {
 
 #---------------------------------------------------------------------------------------------------
 
+
+
 resource "aws_autoscalingplans_scaling_plan" "autoscale_plans" {
   name = "example-dynamic-cost-optimization"
 
@@ -356,8 +358,8 @@ resource "aws_autoscalingplans_scaling_plan" "autoscale_plans" {
   }
 
   scaling_instruction {
-    max_capacity       = 3
-    min_capacity       = 0
+    max_capacity       = 4
+    min_capacity       = 2
     resource_id        = format("autoScalingGroup/%s", aws_autoscaling_group.Demo_ASG_tf.name)
     scalable_dimension = "autoscaling:autoScalingGroup:DesiredCapacity"
     service_namespace  = "autoscaling"

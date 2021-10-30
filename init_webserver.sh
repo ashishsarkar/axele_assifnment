@@ -6,7 +6,8 @@
   mount -t ext4 /dev/sdf /var/log
 
   sudo yum update -y
-  sudo yum install docker -y
+  sudo amazon-linux-extras install docker
+  sudo yum install docker
   sudo service docker start
   sudo docker run -i -t -p 80:80 ricardoamaro/drupal8
 
