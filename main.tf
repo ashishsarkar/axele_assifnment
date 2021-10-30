@@ -247,7 +247,7 @@ egress {
 
 
 # Bastion Host
-resource "aws_security_group" "webserver_sg" {
+resource "aws_security_group" "webserver_sg_bastion" {
   name        = "bastion_security_group"
   description = "bastion_security_group"
   vpc_id      = aws_vpc.main.id
@@ -282,20 +282,18 @@ egress {
   }
 }
 
-
-resource "aws_instance" "foo" {
-  ami           = "ami-005e54dee72cc1d00" # us-west-2
+resource "aws_instance" "bastion_host" {
+  ami           = "ami-02e136e904f3da870"
   instance_type = "t2.micro"
-
-  network_interface {
-    network_interface_id = aws_network_interface.foo.id
-    device_index         = 0
-  }
-
-  credit_specification {
-    cpu_credits = "unlimited"
-  }
+  
 }
+
+resource "aws_network_interface_sg_attachment" "sg_attachment" {
+  security_group_id    = "${data.aws_security_group.webserver_sg_bastion.id}"
+  network_interface_id = "${aws_instance.bastion_host.primary_network_interface_id}"
+}
+
+
 
 
 #Create Launch config
